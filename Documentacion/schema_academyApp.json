@@ -1,0 +1,1065 @@
+{
+  "tables": [
+    {
+      "id": "users_table_001",
+      "name": "users",
+      "x": -667.9999999999995,
+      "y": 0,
+      "locked": false,
+      "fields": [
+        {
+          "name": "id",
+          "type": "BIGINT",
+          "default": "",
+          "check": "",
+          "primary": true,
+          "unique": true,
+          "notNull": true,
+          "increment": true,
+          "comment": "Primary key",
+          "id": "users_id_field",
+          "size": ""
+        },
+        {
+          "id": "users_first_name_field",
+          "name": "first_name",
+          "type": "VARCHAR",
+          "default": "",
+          "check": "",
+          "primary": false,
+          "unique": false,
+          "notNull": true,
+          "increment": false,
+          "comment": "First name of the user",
+          "size": 50
+        },
+        {
+          "id": "users_last_name_field",
+          "name": "last_name",
+          "type": "VARCHAR",
+          "default": "",
+          "check": "",
+          "primary": false,
+          "unique": false,
+          "notNull": true,
+          "increment": false,
+          "comment": "Last name of the user",
+          "size": 50
+        },
+        {
+          "id": "users_email_field",
+          "name": "email",
+          "type": "VARCHAR",
+          "default": "",
+          "check": "",
+          "primary": false,
+          "unique": true,
+          "notNull": true,
+          "increment": false,
+          "comment": "Unique email address",
+          "size": 255
+        },
+        {
+          "id": "users_password_field",
+          "name": "password",
+          "type": "VARCHAR",
+          "default": "",
+          "check": "",
+          "primary": false,
+          "unique": false,
+          "notNull": true,
+          "increment": false,
+          "comment": "Encrypted password",
+          "size": 100
+        },
+        {
+          "id": "users_phone_field",
+          "name": "phone",
+          "type": "VARCHAR",
+          "default": "",
+          "check": "",
+          "primary": false,
+          "unique": false,
+          "notNull": false,
+          "increment": false,
+          "comment": "Phone number",
+          "size": 20
+        },
+        {
+          "id": "users_is_active_field",
+          "name": "is_active",
+          "type": "BOOLEAN",
+          "default": "true",
+          "check": "",
+          "primary": false,
+          "unique": false,
+          "notNull": true,
+          "increment": false,
+          "comment": "User status",
+          "size": ""
+        },
+        {
+          "id": "users_created_at_field",
+          "name": "created_at",
+          "type": "TIMESTAMP",
+          "default": "CURRENT_TIMESTAMP",
+          "check": "",
+          "primary": false,
+          "unique": false,
+          "notNull": true,
+          "increment": false,
+          "comment": "Creation timestamp",
+          "size": ""
+        },
+        {
+          "id": "users_updated_at_field",
+          "name": "updated_at",
+          "type": "TIMESTAMP",
+          "default": "CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP",
+          "check": "",
+          "primary": false,
+          "unique": false,
+          "notNull": true,
+          "increment": false,
+          "comment": "Last update timestamp",
+          "size": ""
+        }
+      ],
+      "comment": "Users table - stores all system users (students, teachers, admins)",
+      "indices": [
+        {
+          "id": 0,
+          "name": "users_index_email",
+          "unique": true,
+          "fields": [
+            "email"
+          ]
+        },
+        {
+          "id": 1,
+          "name": "users_index_active",
+          "unique": false,
+          "fields": [
+            "is_active"
+          ]
+        }
+      ],
+      "color": "#175e7a"
+    },
+    {
+      "id": "roles_table_002",
+      "name": "roles",
+      "x": -1457,
+      "y": 154.99999999999994,
+      "locked": false,
+      "fields": [
+        {
+          "name": "id",
+          "type": "BIGINT",
+          "default": "",
+          "check": "",
+          "primary": true,
+          "unique": true,
+          "notNull": true,
+          "increment": true,
+          "comment": "Primary key",
+          "id": "roles_id_field",
+          "size": ""
+        },
+        {
+          "id": "roles_name_field",
+          "name": "name",
+          "type": "ENUM",
+          "default": "",
+          "check": "STUDENT,TEACHER,ADMIN",
+          "primary": false,
+          "unique": true,
+          "notNull": true,
+          "increment": false,
+          "comment": "Role name - STUDENT, TEACHER, or ADMIN",
+          "size": ""
+        }
+      ],
+      "comment": "Roles table - defines user roles in the system",
+      "indices": [
+        {
+          "id": 0,
+          "name": "roles_index_name",
+          "unique": true,
+          "fields": [
+            "name"
+          ]
+        }
+      ],
+      "color": "#7a5c17"
+    },
+    {
+      "id": "user_roles_table_003",
+      "name": "user_roles",
+      "x": -1079,
+      "y": 150,
+      "locked": false,
+      "fields": [
+        {
+          "id": "user_roles_user_id_field",
+          "name": "user_id",
+          "type": "BIGINT",
+          "default": "",
+          "check": "",
+          "primary": false,
+          "unique": false,
+          "notNull": true,
+          "increment": false,
+          "comment": "Foreign key to users table",
+          "size": ""
+        },
+        {
+          "id": "user_roles_role_id_field",
+          "name": "role_id",
+          "type": "BIGINT",
+          "default": "",
+          "check": "",
+          "primary": false,
+          "unique": false,
+          "notNull": true,
+          "increment": false,
+          "comment": "Foreign key to roles table",
+          "size": ""
+        }
+      ],
+      "comment": "Junction table for many-to-many relationship between users and roles",
+      "indices": [
+        {
+          "id": 0,
+          "name": "user_roles_index_user",
+          "unique": false,
+          "fields": [
+            "user_id"
+          ]
+        },
+        {
+          "id": 1,
+          "name": "user_roles_index_role",
+          "unique": false,
+          "fields": [
+            "role_id"
+          ]
+        },
+        {
+          "id": 2,
+          "name": "user_roles_index_unique",
+          "unique": true,
+          "fields": [
+            "user_id",
+            "role_id"
+          ]
+        }
+      ],
+      "color": "#2d7a17"
+    },
+    {
+      "id": "courses_table_004",
+      "name": "courses",
+      "x": -109,
+      "y": 472.9999999999999,
+      "locked": false,
+      "fields": [
+        {
+          "name": "id",
+          "type": "BIGINT",
+          "default": "",
+          "check": "",
+          "primary": true,
+          "unique": true,
+          "notNull": true,
+          "increment": true,
+          "comment": "Primary key",
+          "id": "courses_id_field",
+          "size": ""
+        },
+        {
+          "id": "courses_title_field",
+          "name": "title",
+          "type": "VARCHAR",
+          "default": "",
+          "check": "",
+          "primary": false,
+          "unique": false,
+          "notNull": true,
+          "increment": false,
+          "comment": "Course title",
+          "size": 100
+        },
+        {
+          "id": "courses_description_field",
+          "name": "description",
+          "type": "TEXT",
+          "default": "",
+          "check": "",
+          "primary": false,
+          "unique": false,
+          "notNull": true,
+          "increment": false,
+          "comment": "Course description",
+          "size": ""
+        },
+        {
+          "id": "courses_code_field",
+          "name": "code",
+          "type": "VARCHAR",
+          "default": "",
+          "check": "",
+          "primary": false,
+          "unique": true,
+          "notNull": true,
+          "increment": false,
+          "comment": "Unique course code",
+          "size": 20
+        },
+        {
+          "id": "courses_duration_hours_field",
+          "name": "duration_hours",
+          "type": "DECIMAL",
+          "default": "",
+          "check": "",
+          "primary": false,
+          "unique": false,
+          "notNull": true,
+          "increment": false,
+          "comment": "Duration in hours per class session",
+          "size": "10,2"
+        },
+        {
+          "id": "courses_price_per_hour_field",
+          "name": "price_per_hour",
+          "type": "DECIMAL",
+          "default": "",
+          "check": "",
+          "primary": false,
+          "unique": false,
+          "notNull": true,
+          "increment": false,
+          "comment": "Price per hour in USD",
+          "size": "10,2"
+        },
+        {
+          "id": "courses_dance_type_field",
+          "name": "dance_type",
+          "type": "ENUM",
+          "default": "",
+          "check": "SALSA,BACHATA,MERENGUE,REGGAETON,KIZOMBA,TANGO,CUMBIA,VALLENATO,BALLROOM,HIP_HOP,CONTEMPORARY,JAZZ",
+          "primary": false,
+          "unique": false,
+          "notNull": true,
+          "increment": false,
+          "comment": "Type of dance",
+          "size": ""
+        },
+        {
+          "id": "courses_level_field",
+          "name": "level",
+          "type": "ENUM",
+          "default": "",
+          "check": "BEGINNER,INTERMEDIATE,ADVANCED,MASTER",
+          "primary": false,
+          "unique": false,
+          "notNull": true,
+          "increment": false,
+          "comment": "Course difficulty level",
+          "size": ""
+        },
+        {
+          "id": "courses_max_students_field",
+          "name": "max_students",
+          "type": "INT",
+          "default": "",
+          "check": "",
+          "primary": false,
+          "unique": false,
+          "notNull": false,
+          "increment": false,
+          "comment": "Maximum number of students per class",
+          "size": ""
+        },
+        {
+          "id": "courses_is_active_field",
+          "name": "is_active",
+          "type": "BOOLEAN",
+          "default": "true",
+          "check": "",
+          "primary": false,
+          "unique": false,
+          "notNull": true,
+          "increment": false,
+          "comment": "Course status",
+          "size": ""
+        },
+        {
+          "id": "courses_teacher_id_field",
+          "name": "teacher_id",
+          "type": "BIGINT",
+          "default": "",
+          "check": "",
+          "primary": false,
+          "unique": false,
+          "notNull": true,
+          "increment": false,
+          "comment": "Foreign key to users table (instructor)",
+          "size": ""
+        },
+        {
+          "id": "courses_created_at_field",
+          "name": "created_at",
+          "type": "TIMESTAMP",
+          "default": "CURRENT_TIMESTAMP",
+          "check": "",
+          "primary": false,
+          "unique": false,
+          "notNull": true,
+          "increment": false,
+          "comment": "Creation timestamp",
+          "size": ""
+        },
+        {
+          "id": "courses_updated_at_field",
+          "name": "updated_at",
+          "type": "TIMESTAMP",
+          "default": "CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP",
+          "check": "",
+          "primary": false,
+          "unique": false,
+          "notNull": true,
+          "increment": false,
+          "comment": "Last update timestamp",
+          "size": ""
+        }
+      ],
+      "comment": "Courses table - stores dance course information managed by instructors",
+      "indices": [
+        {
+          "id": 0,
+          "name": "courses_index_code",
+          "unique": true,
+          "fields": [
+            "code"
+          ]
+        },
+        {
+          "id": 1,
+          "name": "courses_index_teacher",
+          "unique": false,
+          "fields": [
+            "teacher_id"
+          ]
+        },
+        {
+          "id": 2,
+          "name": "courses_index_dance_type",
+          "unique": false,
+          "fields": [
+            "dance_type"
+          ]
+        },
+        {
+          "id": 3,
+          "name": "courses_index_level",
+          "unique": false,
+          "fields": [
+            "level"
+          ]
+        },
+        {
+          "id": 4,
+          "name": "courses_index_active",
+          "unique": false,
+          "fields": [
+            "is_active"
+          ]
+        }
+      ],
+      "color": "#7a1751"
+    },
+    {
+      "id": "enrollments_table_005",
+      "name": "enrollments",
+      "x": -85,
+      "y": 120,
+      "locked": false,
+      "fields": [
+        {
+          "name": "id",
+          "type": "BIGINT",
+          "default": "",
+          "check": "",
+          "primary": true,
+          "unique": true,
+          "notNull": true,
+          "increment": true,
+          "comment": "Primary key",
+          "id": "enrollments_id_field",
+          "size": ""
+        },
+        {
+          "id": "enrollments_user_id_field",
+          "name": "user_id",
+          "type": "BIGINT",
+          "default": "",
+          "check": "",
+          "primary": false,
+          "unique": false,
+          "notNull": true,
+          "increment": false,
+          "comment": "Foreign key to users table (student)",
+          "size": ""
+        },
+        {
+          "id": "enrollments_course_id_field",
+          "name": "course_id",
+          "type": "BIGINT",
+          "default": "",
+          "check": "",
+          "primary": false,
+          "unique": false,
+          "notNull": true,
+          "increment": false,
+          "comment": "Foreign key to courses table",
+          "size": ""
+        },
+        {
+          "id": "enrollments_purchased_hours_field",
+          "name": "purchased_hours",
+          "type": "DECIMAL",
+          "default": "",
+          "check": "",
+          "primary": false,
+          "unique": false,
+          "notNull": true,
+          "increment": false,
+          "comment": "Total hours purchased by student",
+          "size": "10,2"
+        },
+        {
+          "id": "enrollments_used_hours_field",
+          "name": "used_hours",
+          "type": "DECIMAL",
+          "default": "0.00",
+          "check": "",
+          "primary": false,
+          "unique": false,
+          "notNull": true,
+          "increment": false,
+          "comment": "Hours consumed through attendance",
+          "size": "10,2"
+        },
+        {
+          "id": "enrollments_total_paid_field",
+          "name": "total_paid",
+          "type": "DECIMAL",
+          "default": "",
+          "check": "",
+          "primary": false,
+          "unique": false,
+          "notNull": true,
+          "increment": false,
+          "comment": "Total amount paid by student",
+          "size": "10,2"
+        },
+        {
+          "id": "enrollments_status_field",
+          "name": "status",
+          "type": "ENUM",
+          "default": "ACTIVE",
+          "check": "ACTIVE,HOURS_EXHAUSTED,SUSPENDED,CANCELLED",
+          "primary": false,
+          "unique": false,
+          "notNull": true,
+          "increment": false,
+          "comment": "Enrollment status",
+          "size": ""
+        },
+        {
+          "id": "enrollments_enrolled_at_field",
+          "name": "enrolled_at",
+          "type": "TIMESTAMP",
+          "default": "CURRENT_TIMESTAMP",
+          "check": "",
+          "primary": false,
+          "unique": false,
+          "notNull": true,
+          "increment": false,
+          "comment": "Enrollment timestamp",
+          "size": ""
+        },
+        {
+          "id": "enrollments_completed_at_field",
+          "name": "completed_at",
+          "type": "TIMESTAMP",
+          "default": "",
+          "check": "",
+          "primary": false,
+          "unique": false,
+          "notNull": false,
+          "increment": false,
+          "comment": "Completion timestamp",
+          "size": ""
+        }
+      ],
+      "comment": "Enrollments table - tracks student purchases and hour consumption",
+      "indices": [
+        {
+          "id": 0,
+          "name": "enrollments_index_user",
+          "unique": false,
+          "fields": [
+            "user_id"
+          ]
+        },
+        {
+          "id": 1,
+          "name": "enrollments_index_course",
+          "unique": false,
+          "fields": [
+            "course_id"
+          ]
+        },
+        {
+          "id": 2,
+          "name": "enrollments_index_status",
+          "unique": false,
+          "fields": [
+            "status"
+          ]
+        }
+      ],
+      "color": "#17757a"
+    },
+    {
+      "id": "class_sessions_table_006",
+      "name": "class_sessions",
+      "x": 350,
+      "y": 300,
+      "locked": false,
+      "fields": [
+        {
+          "name": "id",
+          "type": "BIGINT",
+          "default": "",
+          "check": "",
+          "primary": true,
+          "unique": true,
+          "notNull": true,
+          "increment": true,
+          "comment": "Primary key",
+          "id": "class_sessions_id_field",
+          "size": ""
+        },
+        {
+          "id": "class_sessions_course_id_field",
+          "name": "course_id",
+          "type": "BIGINT",
+          "default": "",
+          "check": "",
+          "primary": false,
+          "unique": false,
+          "notNull": true,
+          "increment": false,
+          "comment": "Foreign key to courses table",
+          "size": ""
+        },
+        {
+          "id": "class_sessions_teacher_id_field",
+          "name": "teacher_id",
+          "type": "BIGINT",
+          "default": "",
+          "check": "",
+          "primary": false,
+          "unique": false,
+          "notNull": true,
+          "increment": false,
+          "comment": "Foreign key to users table (instructor)",
+          "size": ""
+        },
+        {
+          "id": "class_sessions_session_date_field",
+          "name": "session_date",
+          "type": "TIMESTAMP",
+          "default": "",
+          "check": "",
+          "primary": false,
+          "unique": false,
+          "notNull": true,
+          "increment": false,
+          "comment": "Date and time of the class",
+          "size": ""
+        },
+        {
+          "id": "class_sessions_duration_hours_field",
+          "name": "duration_hours",
+          "type": "DECIMAL",
+          "default": "",
+          "check": "",
+          "primary": false,
+          "unique": false,
+          "notNull": true,
+          "increment": false,
+          "comment": "Duration of this specific class",
+          "size": "10,2"
+        },
+        {
+          "id": "class_sessions_max_capacity_field",
+          "name": "max_capacity",
+          "type": "INT",
+          "default": "",
+          "check": "",
+          "primary": false,
+          "unique": false,
+          "notNull": false,
+          "increment": false,
+          "comment": "Maximum students for this class",
+          "size": ""
+        },
+        {
+          "id": "class_sessions_status_field",
+          "name": "status",
+          "type": "ENUM",
+          "default": "SCHEDULED",
+          "check": "SCHEDULED,IN_PROGRESS,COMPLETED,CANCELLED",
+          "primary": false,
+          "unique": false,
+          "notNull": true,
+          "increment": false,
+          "comment": "Class session status",
+          "size": ""
+        },
+        {
+          "id": "class_sessions_notes_field",
+          "name": "notes",
+          "type": "TEXT",
+          "default": "",
+          "check": "",
+          "primary": false,
+          "unique": false,
+          "notNull": false,
+          "increment": false,
+          "comment": "Class notes and comments",
+          "size": ""
+        },
+        {
+          "id": "class_sessions_created_at_field",
+          "name": "created_at",
+          "type": "TIMESTAMP",
+          "default": "CURRENT_TIMESTAMP",
+          "check": "",
+          "primary": false,
+          "unique": false,
+          "notNull": true,
+          "increment": false,
+          "comment": "Creation timestamp",
+          "size": ""
+        }
+      ],
+      "comment": "Class Sessions table - scheduled and actual dance classes",
+      "indices": [
+        {
+          "id": 0,
+          "name": "class_sessions_index_course",
+          "unique": false,
+          "fields": [
+            "course_id"
+          ]
+        },
+        {
+          "id": 1,
+          "name": "class_sessions_index_teacher",
+          "unique": false,
+          "fields": [
+            "teacher_id"
+          ]
+        },
+        {
+          "id": 2,
+          "name": "class_sessions_index_date",
+          "unique": false,
+          "fields": [
+            "session_date"
+          ]
+        },
+        {
+          "id": 3,
+          "name": "class_sessions_index_status",
+          "unique": false,
+          "fields": [
+            "status"
+          ]
+        }
+      ],
+      "color": "#7a3417"
+    },
+    {
+      "id": "attendances_table_007",
+      "name": "attendances",
+      "x": 150,
+      "y": 700,
+      "locked": false,
+      "fields": [
+        {
+          "name": "id",
+          "type": "BIGINT",
+          "default": "",
+          "check": "",
+          "primary": true,
+          "unique": true,
+          "notNull": true,
+          "increment": true,
+          "comment": "Primary key",
+          "id": "attendances_id_field",
+          "size": ""
+        },
+        {
+          "id": "attendances_enrollment_id_field",
+          "name": "enrollment_id",
+          "type": "BIGINT",
+          "default": "",
+          "check": "",
+          "primary": false,
+          "unique": false,
+          "notNull": true,
+          "increment": false,
+          "comment": "Foreign key to enrollments table",
+          "size": ""
+        },
+        {
+          "id": "attendances_class_session_id_field",
+          "name": "class_session_id",
+          "type": "BIGINT",
+          "default": "",
+          "check": "",
+          "primary": false,
+          "unique": false,
+          "notNull": true,
+          "increment": false,
+          "comment": "Foreign key to class_sessions table",
+          "size": ""
+        },
+        {
+          "id": "attendances_hours_deducted_field",
+          "name": "hours_deducted",
+          "type": "DECIMAL",
+          "default": "",
+          "check": "",
+          "primary": false,
+          "unique": false,
+          "notNull": true,
+          "increment": false,
+          "comment": "Hours deducted from student balance",
+          "size": "10,2"
+        },
+        {
+          "id": "attendances_status_field",
+          "name": "status",
+          "type": "ENUM",
+          "default": "PRESENT",
+          "check": "PRESENT,ABSENT,LATE,EXCUSED",
+          "primary": false,
+          "unique": false,
+          "notNull": true,
+          "increment": false,
+          "comment": "Attendance status",
+          "size": ""
+        },
+        {
+          "id": "attendances_marked_at_field",
+          "name": "marked_at",
+          "type": "TIMESTAMP",
+          "default": "CURRENT_TIMESTAMP",
+          "check": "",
+          "primary": false,
+          "unique": false,
+          "notNull": true,
+          "increment": false,
+          "comment": "When attendance was marked",
+          "size": ""
+        },
+        {
+          "id": "attendances_marked_by_field",
+          "name": "marked_by",
+          "type": "BIGINT",
+          "default": "",
+          "check": "",
+          "primary": false,
+          "unique": false,
+          "notNull": true,
+          "increment": false,
+          "comment": "Foreign key to users table (teacher who marked)",
+          "size": ""
+        },
+        {
+          "id": "attendances_notes_field",
+          "name": "notes",
+          "type": "TEXT",
+          "default": "",
+          "check": "",
+          "primary": false,
+          "unique": false,
+          "notNull": false,
+          "increment": false,
+          "comment": "Additional notes about attendance",
+          "size": ""
+        }
+      ],
+      "comment": "Attendances table - tracks student attendance and hour deductions",
+      "indices": [
+        {
+          "id": 0,
+          "name": "attendances_index_enrollment",
+          "unique": false,
+          "fields": [
+            "enrollment_id"
+          ]
+        },
+        {
+          "id": 1,
+          "name": "attendances_index_class_session",
+          "unique": false,
+          "fields": [
+            "class_session_id"
+          ]
+        },
+        {
+          "id": 2,
+          "name": "attendances_index_status",
+          "unique": false,
+          "fields": [
+            "status"
+          ]
+        },
+        {
+          "id": 3,
+          "name": "attendances_index_unique",
+          "unique": true,
+          "fields": [
+            "enrollment_id",
+            "class_session_id"
+          ]
+        }
+      ],
+      "color": "#17477a"
+    }
+  ],
+  "relationships": [
+    {
+      "startTableId": "users_table_001",
+      "startFieldId": "users_id_field",
+      "endTableId": "user_roles_table_003",
+      "endFieldId": "user_roles_user_id_field",
+      "cardinality": "one_to_many",
+      "updateConstraint": "Cascade",
+      "deleteConstraint": "Cascade",
+      "name": "fk_user_roles_user",
+      "id": 0
+    },
+    {
+      "startTableId": "roles_table_002",
+      "startFieldId": "roles_id_field",
+      "endTableId": "user_roles_table_003",
+      "endFieldId": "user_roles_role_id_field",
+      "cardinality": "one_to_many",
+      "updateConstraint": "Cascade",
+      "deleteConstraint": "Cascade",
+      "name": "fk_user_roles_role",
+      "id": 1
+    },
+    {
+      "startTableId": "users_table_001",
+      "startFieldId": "users_id_field",
+      "endTableId": "courses_table_004",
+      "endFieldId": "courses_teacher_id_field",
+      "cardinality": "one_to_many",
+      "updateConstraint": "Cascade",
+      "deleteConstraint": "Restrict",
+      "name": "fk_courses_teacher",
+      "id": 2
+    },
+    {
+      "startTableId": "users_table_001",
+      "startFieldId": "users_id_field",
+      "endTableId": "enrollments_table_005",
+      "endFieldId": "enrollments_user_id_field",
+      "cardinality": "one_to_many",
+      "updateConstraint": "Cascade",
+      "deleteConstraint": "Cascade",
+      "name": "fk_enrollments_student",
+      "id": 3
+    },
+    {
+      "startTableId": "courses_table_004",
+      "startFieldId": "courses_id_field",
+      "endTableId": "enrollments_table_005",
+      "endFieldId": "enrollments_course_id_field",
+      "cardinality": "one_to_many",
+      "updateConstraint": "Cascade",
+      "deleteConstraint": "Cascade",
+      "name": "fk_enrollments_course",
+      "id": 4
+    },
+    {
+      "startTableId": "courses_table_004",
+      "startFieldId": "courses_id_field",
+      "endTableId": "class_sessions_table_006",
+      "endFieldId": "class_sessions_course_id_field",
+      "cardinality": "one_to_many",
+      "updateConstraint": "Cascade",
+      "deleteConstraint": "Cascade",
+      "name": "fk_class_sessions_course",
+      "id": 5
+    },
+    {
+      "startTableId": "users_table_001",
+      "startFieldId": "users_id_field",
+      "endTableId": "class_sessions_table_006",
+      "endFieldId": "class_sessions_teacher_id_field",
+      "cardinality": "one_to_many",
+      "updateConstraint": "Cascade",
+      "deleteConstraint": "Restrict",
+      "name": "fk_class_sessions_teacher",
+      "id": 6
+    },
+    {
+      "startTableId": "enrollments_table_005",
+      "startFieldId": "enrollments_id_field",
+      "endTableId": "attendances_table_007",
+      "endFieldId": "attendances_enrollment_id_field",
+      "cardinality": "one_to_many",
+      "updateConstraint": "Cascade",
+      "deleteConstraint": "Cascade",
+      "name": "fk_attendances_enrollment",
+      "id": 7
+    },
+    {
+      "startTableId": "class_sessions_table_006",
+      "startFieldId": "class_sessions_id_field",
+      "endTableId": "attendances_table_007",
+      "endFieldId": "attendances_class_session_id_field",
+      "cardinality": "one_to_many",
+      "updateConstraint": "Cascade",
+      "deleteConstraint": "Cascade",
+      "name": "fk_attendances_class_session",
+      "id": 8
+    },
+    {
+      "startTableId": "users_table_001",
+      "startFieldId": "users_id_field",
+      "endTableId": "attendances_table_007",
+      "endFieldId": "attendances_marked_by_field",
+      "cardinality": "one_to_many",
+      "updateConstraint": "Cascade",
+      "deleteConstraint": "Restrict",
+      "name": "fk_attendances_marked_by",
+      "id": 9
+    }
+  ],
+  "notes": [],
+  "subjectAreas": [],
+  "database": "mysql",
+  "title": "Academia de Baile - Sistema de Gestión de Horas"
+}
