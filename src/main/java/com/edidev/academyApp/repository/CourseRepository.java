@@ -45,4 +45,7 @@ public interface CourseRepository extends JpaRepository<Course, Long> {
 
     @Query("SELECT DISTINCT c.level FROM Course c WHERE c.isActive = true ORDER BY c.level")
     List<DanceLevel> findDistinctActiveLevels();
+
+    // Métodos de conteo
+    Long countByIsActiveTrue();
 }

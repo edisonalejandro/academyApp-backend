@@ -194,7 +194,7 @@ public class ClassSessionService {
                 .orElseThrow(() -> new ResourceNotFoundException("Sesión no encontrada: " + id));
     }
 
-    private ClassSessionDTO toDTO(ClassSession s) {
+    public ClassSessionDTO toDTO(ClassSession s) {
         Long attendanceCount = attendanceRepository.countByClassSessionId(s.getId());
 
         Integer availableSpots = null;

@@ -9,6 +9,15 @@ import org.springframework.context.annotation.Configuration;
 @Data
 public class JwtProperties {
     
-    private String secret = "mySecretKeyForJWTTokenGenerationAndValidationThatIsSecureEnough256Bits";
-    private long expirationMs = 86400000; // 24 horas en milisegundos
+    /**
+     * JWT Secret - DEBE ser configurado vía variable de entorno JWT_SECRET
+     * Usar al menos 256 bits (43+ caracteres base64)
+     */
+    private String secret;
+    
+    /**
+     * Tiempo de expiración del token en milisegundos
+     * Default: 24 horas (86400000 ms)
+     */
+    private long expirationMs = 86400000;
 }

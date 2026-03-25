@@ -265,4 +265,22 @@ public interface AttendanceRepository extends JpaRepository<Attendance, Long> {
            "ORDER BY attendanceRate DESC, totalAttendances DESC")
     List<Map<String, Object>> getCourseAttendanceRanking(@Param("startDate") LocalDateTime startDate,
                                                         @Param("endDate") LocalDateTime endDate);
+
+    // ========== MÉTODOS PARA DASHBOARD ==========
+
+    /**
+     * Calcular el porcentaje de asistencia general del sistema
+     */
+    @Query("SELECT COALESCE(CAST(SUM(CASE WHEN a.attended = true THEN 1 ELSE 0 END) AS DOUBLE) / NULLIF(COUNT(a), 0) * 100, 0.0) " +
+           "FROM Attendance a")
+    Double calculateOverallAttendanceRate();
+
+    /**
+     * Encontrar estudiantes con baja asistencia (sin rango de fechas)
+     */
+    @Query("SELECT s FROM Student s " +
+           "JOIN s.attendances a " +
+           "GROUP BY s.id, s.firstName, s.lastName, s.email " +
+           "HAVING (CAST(SUM(CASE WHEN a.attended = true THEN 1 ELSE 0 END) AS DOUBLE) / COUNT(a) * 100) < :minPercentage")
+    List<Student> findStudentsWithLowAttendance(@Param("minPercentage") Double minPercentage);
 }

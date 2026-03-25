@@ -32,4 +32,11 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
     List<Student> searchByTerm(@Param("term") String term);
 
     List<Student> findAllByOrderByLastNameAscFirstNameAsc();
+
+    // Métodos de conteo
+    Long countByStatus(StudentStatus status);
+
+    @Query("SELECT COUNT(s) FROM Student s WHERE s.createdAt BETWEEN :startDate AND :endDate")
+    Long countByCreatedAtBetween(@Param("startDate") java.time.LocalDateTime startDate, 
+                                  @Param("endDate") java.time.LocalDateTime endDate);
 }

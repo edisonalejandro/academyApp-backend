@@ -30,4 +30,14 @@ public interface ClassSessionRepository extends JpaRepository<ClassSession, Long
 
     @Query("SELECT cs FROM ClassSession cs WHERE cs.status = 'SCHEDULED' AND cs.scheduledDate < :now")
     List<ClassSession> findOverdueScheduledSessions(@Param("now") LocalDateTime now);
+
+    // Métodos adicionales para Dashboard
+    @Query("SELECT COUNT(cs) FROM ClassSession cs WHERE cs.status = :status AND cs.scheduledDate BETWEEN :startDate AND :endDate")
+    Long countByStatusAndScheduledDateBetween(@Param("status") ClassStatus status, 
+                                               @Param("startDate") LocalDateTime startDate, 
+                                               @Param("endDate") LocalDateTime endDate);
+
+    @Query("SELECT cs FROM ClassSession cs WHERE cs.status IN ('SCHEDULED', 'IN_PROGRESS') AND cs.scheduledDate BETWEEN :startDate AND :endDate ORDER BY cs.scheduledDate ASC")
+    List<ClassSession> findUpcomingSessionsByDateRange(@Param("startDate") LocalDateTime startDate, 
+                                                        @Param("endDate") LocalDateTime endDate);
 }

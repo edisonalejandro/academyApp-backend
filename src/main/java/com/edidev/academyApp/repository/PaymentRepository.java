@@ -41,4 +41,20 @@ public interface PaymentRepository extends JpaRepository<Payment, Long> {
 
     @Query("SELECT p FROM Payment p WHERE p.user.email = :email ORDER BY p.createdAt DESC")
     List<Payment> findByUserEmailOrderByCreatedAtDesc(@Param("email") String email);
+
+    // Métodos adicionales para Dashboard
+    @Query("SELECT COALESCE(SUM(p.finalPrice), 0) FROM Payment p WHERE p.status = :status AND p.paymentDate BETWEEN :startDate AND :endDate")
+    java.math.BigDecimal sumAmountByStatusAndDateBetween(@Param("status") com.edidev.academyApp.enums.PaymentStatus status, 
+                                                          @Param("startDate") LocalDateTime startDate, 
+                                                          @Param("endDate") LocalDateTime endDate);
+
+    @Query("SELECT COUNT(p) FROM Payment p WHERE p.status = :status AND p.paymentDate BETWEEN :startDate AND :endDate")
+    Long countByStatusAndPaymentDateBetween(@Param("status") com.edidev.academyApp.enums.PaymentStatus status, 
+                                             @Param("startDate") LocalDateTime startDate, 
+                                             @Param("endDate") LocalDateTime endDate);
+
+    @Query("SELECT COALESCE(SUM(p.finalPrice), 0) FROM Payment p WHERE p.status = :status")
+    java.math.BigDecimal sumAmountByStatus(@Param("status") com.edidev.academyApp.enums.PaymentStatus status);
+
+    Long countByStatus(com.edidev.academyApp.enums.PaymentStatus status);
 }
