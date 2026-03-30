@@ -3,6 +3,8 @@ package com.edidev.academyApp.service;
 import com.edidev.academyApp.dto.EnrollmentDTO;
 import com.edidev.academyApp.dto.EnrollmentSummaryDTO;
 import com.edidev.academyApp.enums.EnrollmentStatus;
+import com.edidev.academyApp.enums.StudentCategory;
+import com.edidev.academyApp.enums.StudentStatus;
 import com.edidev.academyApp.exception.EnrollmentNotFoundException;
 import com.edidev.academyApp.exception.UserNotFoundException;
 import com.edidev.academyApp.model.*;
@@ -37,9 +39,20 @@ public class EnrollmentService {
         log.info("Creando/actualizando inscripción para usuario: {} en curso: {}", 
                 user.getEmail(), course.getTitle());
 
-        // Buscar el Student asociado al User
+        // Buscar el Student asociado al User, o crear uno automáticamente
         Student student = studentRepository.findByUserId(user.getId())
-                .orElseThrow(() -> new RuntimeException("Estudiante no encontrado para el usuario: " + user.getEmail()));
+                .orElseGet(() -> {
+                    log.info("No existe Student para usuario: {}, creando automáticamente", user.getEmail());
+                    Student newStudent = Student.builder()
+                            .firstName(user.getFirstName())
+                            .lastName(user.getLastName())
+                            .email(user.getEmail())
+                            .user(user)
+                            .status(StudentStatus.ACTIVE)
+                            .category(StudentCategory.REGULAR)
+                            .build();
+                    return studentRepository.save(newStudent);
+                });
 
         // Buscar inscripción existente
         Optional<Enrollment> existingEnrollment = enrollmentRepository

@@ -3,6 +3,8 @@ package com.edidev.academyApp.repository;
 import com.edidev.academyApp.model.Course;
 import com.edidev.academyApp.enums.DanceType;
 import com.edidev.academyApp.enums.DanceLevel;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -17,6 +19,8 @@ public interface CourseRepository extends JpaRepository<Course, Long> {
     Optional<Course> findByCode(String code);
 
     List<Course> findByIsActiveTrueOrderByTitleAsc();
+
+    Page<Course> findByIsActiveTrue(Pageable pageable);
 
     List<Course> findByDanceTypeAndIsActiveTrueOrderByLevelAsc(DanceType danceType);
 

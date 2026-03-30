@@ -14,6 +14,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -33,9 +36,17 @@ public class CourseService {
                 .stream().map(this::toDTO).collect(Collectors.toList());
     }
 
+    public Page<CourseDTO> getAllActiveCourses(Pageable pageable) {
+        return courseRepository.findByIsActiveTrue(pageable).map(this::toDTO);
+    }
+
     public List<CourseDTO> getAllCourses() {
         return courseRepository.findAll()
                 .stream().map(this::toDTO).collect(Collectors.toList());
+    }
+
+    public Page<CourseDTO> getAllCourses(Pageable pageable) {
+        return courseRepository.findAll(pageable).map(this::toDTO);
     }
 
     public CourseDTO getCourseById(Long courseId) {

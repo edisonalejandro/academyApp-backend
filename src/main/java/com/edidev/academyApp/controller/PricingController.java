@@ -26,7 +26,6 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/pricing")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "*")
 @Slf4j
 @Tag(name = "Pricing", description = "💵 Gestión de precios y tarifas")
 public class PricingController {

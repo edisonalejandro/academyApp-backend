@@ -5,15 +5,20 @@ import com.edidev.academyApp.model.*;
 import com.edidev.academyApp.repository.*;
 import com.edidev.academyApp.service.RoleService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.core.env.Environment;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Arrays;
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class DataInitializer implements CommandLineRunner {
 
     private final RoleService roleService;
@@ -21,31 +26,43 @@ public class DataInitializer implements CommandLineRunner {
     private final PasswordEncoder passwordEncoder;
     private final CourseRepository courseRepository;
     private final PricingRuleRepository pricingRuleRepository;
+    private final Environment environment;
+
+    @Value("${ADMIN_EMAIL:}")
+    private String adminEmail;
+
+    @Value("${ADMIN_PASSWORD:}")
+    private String adminPassword;
 
     @Override
     public void run(String... args) throws Exception {
+        validateAdminCredentials();
+
         // Inicializar roles por defecto
         roleService.initializeDefaultRoles();
-        System.out.println("Roles por defecto inicializados correctamente");
+        log.info("Roles por defecto inicializados correctamente");
+
+        String effectiveEmail    = adminEmail.isBlank()    ? "admin@academy.com" : adminEmail;
+        String effectivePassword = adminPassword.isBlank() ? "admin123"           : adminPassword;
 
         // Crear usuario administrador por defecto si no existe
-        User admin = null;
-        if (!userRepository.existsByEmail("admin@academy.com")) {
+        User admin;
+        if (!userRepository.existsByEmail(effectiveEmail)) {
             admin = new User(
                 "Administrador",
                 "Sistema",
-                "admin@academy.com",
-                passwordEncoder.encode("admin123")
+                effectiveEmail,
+                passwordEncoder.encode(effectivePassword)
             );
-            
+
             Role adminRole = roleService.findByName(RoleName.ADMIN)
                     .orElseThrow(() -> new RuntimeException("Rol ADMIN no encontrado"));
             admin.getRoles().add(adminRole);
-            
+
             admin = userRepository.save(admin);
-            System.out.println("Usuario administrador creado: admin@academy.com / admin123");
+            log.info("Usuario administrador creado: {}", effectiveEmail);
         } else {
-            admin = userRepository.findByEmail("admin@academy.com")
+            admin = userRepository.findByEmail(effectiveEmail)
                     .orElseThrow(() -> new RuntimeException("Admin no encontrado"));
         }
 
@@ -67,13 +84,33 @@ public class DataInitializer implements CommandLineRunner {
                     .build();
             
             courseRepository.save(salsaCourse);
-            System.out.println("Curso de ejemplo creado: " + salsaCourse.getTitle());
+            log.info("Curso de ejemplo creado: {}", salsaCourse.getTitle());
         }
 
         // Crear reglas de precios por defecto si no existen
         if (pricingRuleRepository.count() == 0) {
             createDefaultPricingRules();
-            System.out.println("Reglas de precios por defecto creadas correctamente");
+            log.info("Reglas de precios por defecto creadas correctamente");
+        }
+    }
+
+    /**
+     * Valida que las credenciales del administrador estén configuradas mediante
+     * variables de entorno en el perfil de producción. Falla antes de arrancar
+     * si no se han configurado, evitando despliegues con credenciales por defecto.
+     */
+    private void validateAdminCredentials() {
+        boolean isProd = Arrays.asList(environment.getActiveProfiles()).contains("prod");
+        if (isProd && adminPassword.isBlank()) {
+            throw new IllegalStateException(
+                "[SEGURIDAD] ADMIN_PASSWORD debe configurarse como variable de entorno en el perfil 'prod'. "
+                + "No se permite iniciar la aplicación con credenciales de administrador por defecto."
+            );
+        }
+        if (isProd && adminEmail.isBlank()) {
+            throw new IllegalStateException(
+                "[SEGURIDAD] ADMIN_EMAIL debe configurarse como variable de entorno en el perfil 'prod'."
+            );
         }
     }
 

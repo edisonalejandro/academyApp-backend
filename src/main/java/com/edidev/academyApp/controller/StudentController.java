@@ -14,6 +14,10 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
+
 import java.util.List;
 import java.util.Map;
 
@@ -28,8 +32,9 @@ public class StudentController {
     @GetMapping
     @Operation(summary = "Obtener todos los estudiantes")
     @PreAuthorize("hasRole('ADMIN') or hasRole('TEACHER')")
-    public ResponseEntity<List<StudentDTO>> getAllStudents() {
-        return ResponseEntity.ok(studentService.getAllStudents());
+    public ResponseEntity<Page<StudentDTO>> getAllStudents(
+            @PageableDefault(size = 50, sort = {"lastName", "firstName"}) Pageable pageable) {
+        return ResponseEntity.ok(studentService.getAllStudents(pageable));
     }
 
     @GetMapping("/{id}")

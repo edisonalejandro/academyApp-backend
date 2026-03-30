@@ -3,29 +3,24 @@ package com.edidev.academyApp.config;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.lang.NonNull;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-
-import java.util.Arrays;
 
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
 
-    // CORS está configurado en SecurityConfig.java
-    // No se necesita configuración adicional aquí para evitar conflictos
-    
-    /*
-    @Value("${app.cors.allowed-origins:http://localhost:3000,http://localhost:4200}")
-    private String allowedOrigins;
+    @Value("${app.upload.dir:/app/uploads}")
+    private String uploadDir;
 
+    /**
+     * Sirve las imágenes subidas por el admin desde el directorio de uploads.
+     * Las peticiones GET /api/catalog/uploads/** se resuelven contra el filesystem.
+     */
     @Override
-    public void addCorsMappings(@NonNull CorsRegistry registry) {
-        registry.addMapping("/api/**")
-                .allowedOriginPatterns(allowedOrigins.split(","))
-                .allowedMethods("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS")
-                .allowedHeaders("*")
-                .allowCredentials(true)
-                .maxAge(3600);
+    public void addResourceHandlers(@NonNull ResourceHandlerRegistry registry) {
+        String location = "file:" + uploadDir + "/products/";
+        registry.addResourceHandler("/api/catalog/uploads/**")
+                .addResourceLocations(location)
+                .setCachePeriod(3600);
     }
-    */
 }

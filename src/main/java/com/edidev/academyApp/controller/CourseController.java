@@ -13,6 +13,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
+
 import java.util.List;
 import java.util.Map;
 
@@ -26,15 +30,17 @@ public class CourseController {
 
     @GetMapping
     @Operation(summary = "Obtener todos los cursos activos")
-    public ResponseEntity<List<CourseDTO>> getAllCourses() {
-        return ResponseEntity.ok(courseService.getAllActiveCourses());
+    public ResponseEntity<Page<CourseDTO>> getAllCourses(
+            @PageableDefault(size = 20, sort = "title") Pageable pageable) {
+        return ResponseEntity.ok(courseService.getAllActiveCourses(pageable));
     }
 
     @GetMapping("/all")
     @Operation(summary = "Obtener todos los cursos (incluye inactivos)")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<List<CourseDTO>> getAllCoursesAdmin() {
-        return ResponseEntity.ok(courseService.getAllCourses());
+    public ResponseEntity<Page<CourseDTO>> getAllCoursesAdmin(
+            @PageableDefault(size = 20, sort = "title") Pageable pageable) {
+        return ResponseEntity.ok(courseService.getAllCourses(pageable));
     }
 
     @GetMapping("/{id}")

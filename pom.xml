@@ -68,6 +68,23 @@
 			<scope>runtime</scope>
 		</dependency>
 
+		<!-- Flyway: gestión de migraciones de base de datos -->
+		<dependency>
+			<groupId>org.flywaydb</groupId>
+			<artifactId>flyway-core</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.flywaydb</groupId>
+			<artifactId>flyway-database-postgresql</artifactId>
+		</dependency>
+
+		<!-- Rate Limiting: Bucket4j (in-memory, sin dependencias externas) -->
+		<dependency>
+			<groupId>com.bucket4j</groupId>
+			<artifactId>bucket4j-core</artifactId>
+			<version>8.10.1</version>
+		</dependency>
+
 		<!-- Development Tools -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>

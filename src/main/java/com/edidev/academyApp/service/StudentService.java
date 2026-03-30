@@ -14,6 +14,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -31,6 +35,10 @@ public class StudentService {
     public List<StudentDTO> getAllStudents() {
         return studentRepository.findAllByOrderByLastNameAscFirstNameAsc()
                 .stream().map(this::toDTO).collect(Collectors.toList());
+    }
+
+    public Page<StudentDTO> getAllStudents(Pageable pageable) {
+        return studentRepository.findAll(pageable).map(this::toDTO);
     }
 
     public StudentDTO getStudentById(Long id) {

@@ -1,0 +1,65 @@
+# =================================
+# application-local.properties.example
+# =================================
+# Plantilla para desarrollo local. Copiar a application-local.properties
+# y NUNCA subir application-local.properties al repositorio (.gitignore).
+#
+# Pasos para onboarding:
+#   1. cp application-local.properties.example application-local.properties
+#   2. Editar los valores marcados con <CAMBIAR>
+#   3. Asegurarse de tener PostgreSQL corriendo localmente (o usar Docker Compose)
+#
+# El perfil 'local' sobreescribe application.properties para desarrollo.
+# =================================
+
+# =================================
+# DATABASE CONFIGURATION
+# =================================
+# PostgreSQL local — ajustar usuario/contraseña según tu instalación
+spring.datasource.url=jdbc:postgresql://localhost:5432/academia_baile
+spring.datasource.username=<CAMBIAR: tu usuario de PostgreSQL>
+spring.datasource.password=<CAMBIAR: tu contraseña de PostgreSQL>
+
+# Alternativa rápida con Docker Compose:
+#   docker compose -f infra/docker-compose.yml up postgres -d
+# Y usar las credenciales del docker-compose.yml
+
+# =================================
+# JWT CONFIGURATION
+# =================================
+# Secreto para firmar JWT — puede ser cualquier string largo en local
+# Generar uno seguro con: openssl rand -base64 64
+app.jwt.secret=<CAMBIAR: secreto-largo-al-menos-64-caracteres-para-desarrollo-local>
+
+# Expiración del token en milisegundos (por defecto 24h = 86400000)
+app.jwt.expiration-ms=86400000
+
+# =================================
+# ADMIN CREDENTIALS
+# =================================
+# Credenciales del usuario administrador creado por DataInitializer al arrancar
+ADMIN_EMAIL=<CAMBIAR: admin@tudominio.com>
+ADMIN_PASSWORD=<CAMBIAR: contraseña-segura-min-8-caracteres>
+
+# =================================
+# CORS CONFIGURATION
+# =================================
+# En desarrollo local con Angular en puerto 4200
+app.cors.allowed-origins=http://localhost:3000,http://localhost:4200
+
+# =================================
+# LOGGING — DEBUG para desarrollo
+# =================================
+# Activar logs SQL para ver las queries en consola
+logging.level.com.edidev.academyApp=DEBUG
+logging.level.org.springframework.security=DEBUG
+logging.level.org.hibernate.SQL=DEBUG
+logging.level.org.hibernate.type.descriptor.sql.BasicBinder=TRACE
+spring.jpa.show-sql=true
+spring.jpa.properties.hibernate.format_sql=true
+
+# =================================
+# SWAGGER
+# =================================
+springdoc.swagger-ui.enabled=true
+springdoc.api-docs.enabled=true

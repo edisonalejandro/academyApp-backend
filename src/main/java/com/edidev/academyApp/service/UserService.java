@@ -7,25 +7,24 @@ import com.edidev.academyApp.model.Role;
 import com.edidev.academyApp.model.RoleName;
 import com.edidev.academyApp.model.User;
 import com.edidev.academyApp.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class UserService {
 
-    @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-
-    @Autowired
-    private RoleService roleService;
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final RoleService roleService;
 
     // Obtener todos los usuarios
     public List<UserDTO> getAllUsers() {
@@ -33,6 +32,11 @@ public class UserService {
                 .stream()
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
+    }
+
+    // Obtener todos los usuarios con paginación
+    public Page<UserDTO> getAllUsers(Pageable pageable) {
+        return userRepository.findAll(pageable).map(this::convertToDTO);
     }
 
     // Obtener usuario por ID

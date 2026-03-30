@@ -9,33 +9,27 @@ import com.edidev.academyApp.model.RoleName;
 import com.edidev.academyApp.model.User;
 import com.edidev.academyApp.repository.UserRepository;
 import com.edidev.academyApp.security.JwtUtils;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class AuthService {
 
-    @Autowired
-    private AuthenticationManager authenticationManager;
-
-    @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-
-    @Autowired
-    private JwtUtils jwtUtils;
-
-    @Autowired
-    private RoleService roleService;
+    private final AuthenticationManager authenticationManager;
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final JwtUtils jwtUtils;
+    private final RoleService roleService;
 
     public JwtResponseDTO login(LoginRequestDTO loginRequest) {
         Authentication authentication = authenticationManager.authenticate(
@@ -57,6 +51,7 @@ public class AuthService {
                                  user.getFirstName(), user.getLastName(), roles);
     }
 
+    @Transactional
     public JwtResponseDTO register(RegisterRequestDTO registerRequest) {
         // Verificar si el email ya existe
         if (userRepository.existsByEmail(registerRequest.getEmail())) {
