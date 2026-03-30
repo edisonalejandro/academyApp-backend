@@ -5,8 +5,11 @@ target/
 !**/src/test/**/target/
 
 ### Secrets / Credentials ###
+# application-local.properties contiene credenciales reales de desarrollo → NO commitear
 src/main/resources/application-local.properties
-src/main/resources/application-prod.properties
+# application-dev.properties puede contener credenciales locales → NO commitear
+src/main/resources/application-dev.properties
+# application-prod.properties NO tiene credenciales (lee variables de entorno) → SÍ se commitea
 
 ### JVM crash logs ###
 hs_err_pid*.log
